@@ -1,148 +1,119 @@
+import React from "react";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import he from "he";
 import { IoIosLogIn } from "react-icons/io";
 import { RiNotification3Fill } from "react-icons/ri";
-import { IoSettings } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import empty from "../Images/empty.png";
 
+const Section3 = ({ data, currplaying, topsongs, favorites, toggleFavorite }) => {
+  const decodeEntities = (str) => {
+    return he.decode(str);
+  };
 
-const Section3 = ({ data, index, topsongs, playSong, isTopSong, setTopSong }) => {
+  const isFavorite = (song) => {
+    return favorites.some((fav) => fav.name === song.name);
+  };
 
-    // const [isTopSong, setTopSong] = useState(false);
-    const decodeEntities = (str) => {
-        return he.decode(str);
-    };
+  const currentSong = data && data[currplaying];
 
-    return (
-        <div className='section3'>
-            <div className="links">
-                <div className="link"><IoIosLogIn fontSize={"25px"} color={"white"} /></div>
-                <div className="link"><RiNotification3Fill fontSize={"25px"} color={"white"} /></div>
-                <Link to="/settings">
-                    <div className="link"><IoSettings fontSize={"25px"} color={"white"} /></div>
-                </Link>
-            </div>
-
-
-            <div className="Card1">
-                <p>Top Artist</p>
-                {topsongs !== null &&
-                    topsongs !== undefined &&
-                    topsongs.slice(0, 3).map((element, index) => (
-                        <div
-                            className="result-item"
-                            key={element.id}
-                            onClick={() => {
-                                setTopSong(true);
-                                playSong(index);
-                            }}
-                        >
-                            <div className="songresult">
-                                <img
-                                    src={element.image[2].url}
-                                    alt={element.name}
-                                    height="15px"
-                                    width="15px"
-                                />
-                                <div className="search-details">
-                                    <p>
-                                        {element.name}
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-            </div>
-
-            <hr />
-
-            {
-                isTopSong || data ?
-                    <div className="Card2">
-                        <div className="details2">
-
-                            {
-                                isTopSong ?
-                                    <>
-                                        <img
-                                            src={topsongs && topsongs[index].image[2].url}
-                                            height="100px"
-                                            width="100px"
-                                        />
-                                        <p >
-                                            {topsongs &&
-                                                topsongs.length > 0 &&
-                                                topsongs[index] &&
-                                                decodeEntities(topsongs[index].name)}
-                                        </p>
-                                        <p >
-                                            {topsongs &&
-                                                topsongs.length > 0 &&
-                                                topsongs[index] &&
-                                                topsongs[index].artists.primary[0].name
-                                            }
-
-                                        </p>
-                                    </> :
-                                    <>
-                                        <img
-                                            src={data && data[index].image[2].url}
-                                            height="100px"
-                                            width="100px"
-                                        />
-                                        <p >
-                                            {data &&
-                                                data.length > 0 &&
-                                                data[index] &&
-                                                decodeEntities(data[index].name)}
-                                        </p>
-                                        <p >
-                                            {data &&
-                                                data.length > 0 &&
-                                                data[index] &&
-                                                data[index].artists.primary[0].name
-                                            }
-                                        </p>
-                                    </>
-                            }
-                        </div>
-                        <div className="audioplayer">
-                            {
-                                isTopSong ? <AudioPlayer
-                                    autoPlay
-                                    src={topsongs && topsongs[index].downloadUrl[0].url}
-                                    preload="metadata"
-                                    onPlay={() => {
-                                        console.log("playing top song");
-                                    }}
-                                    onError={() => {
-                                        console.log("error playing audio");
-                                    }}
-                                    style={{ backgroundColor: "#5773ff", color: "white", borderRadius: "7px" }}
-                                /> :
-                                    data && data.length > 0 && data[index] && (
-                                        <AudioPlayer
-                                            autoPlay
-                                            src={data && data[index].downloadUrl[0].url}
-                                            preload="metadata"
-                                            onPlay={() => {
-                                                console.log("playing..");
-                                            }}
-                                            onError={() => {
-                                                console.log("error playing audio");
-                                            }}
-                                            style={{ backgroundColor: "#5773ff", color: "white", borderRadius: "7px" }}
-                                        />
-                                    )
-                            }
-                        </div>
-                    </div>
-                    : <div></div>
-            }
+  return (
+    <div className="section3">
+      <div className="links">
+        <div className="link">
+          <IoIosLogIn fontSize={"25px"} color={"white"} />
         </div>
-    )
-}
+        <div className="link">
+          <RiNotification3Fill fontSize={"25px"} color={"white"} />
+        </div>
+        <div className="link">
+          <FaUser fontSize={"25px"} color={"white"} />
+        </div>
+      </div>
 
-export default Section3
+      <div className="Card1">
+        <p>Top Artist</p>
+        {topsongs !== null &&
+          topsongs !== undefined &&
+          topsongs.slice(0, 3).map((element, index) => (
+            <div className="result-item" key={index} onClick={() => playSong(index)}>
+              <div className="songresult">
+                <img src={element.img} alt={element.name} height="15px" width="15px" />
+                <div className="search-details">
+                  <p>
+                    {decodeEntities(element.artist)} - {element.year}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      <hr />
+
+      <div className="Card2">
+        {data && data.length > 0 ? (
+          <div className="current-song">
+            <img src={data && data[currplaying].img} height="120px" width="120px" />
+            <div
+              className="like-symbol"
+              onClick={() => toggleFavorite(currentSong)}
+              style={{ cursor: "pointer", marginLeft: "10px" }}
+            >
+              {isFavorite(currentSong) ? (
+                <AiFillHeart color="red" size="25px" />
+              ) : (
+                <AiOutlineHeart size="25px" />
+              )}
+            </div>
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+    >
+            <p>"Choose a song to play"</p>
+            <img src={empty} alt="" height={"50%"} style={{ maxHeight: "18rem" }} />
+          </div>
+        )}
+
+        <div className="details2">
+          <p>
+            {data &&
+              data.length > 0 &&
+              data[currplaying] &&
+              decodeEntities(data[currplaying].name)}
+          </p>
+          <p>
+            {data &&
+              data.length > 0 &&
+              data[currplaying] &&
+              decodeEntities(data[currplaying].artist)}{" "}
+            {data &&
+              data.length > 0 &&
+              data[currplaying] &&
+              data[currplaying].year}
+          </p>
+        </div>
+
+        {data && (
+          <AudioPlayer
+            autoPlay
+            src={data && data[currplaying].url}
+            preload="metadata"
+            style={{ backgroundColor: "transparent", color: "white" }}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Section3;
