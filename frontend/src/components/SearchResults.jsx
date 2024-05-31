@@ -27,3 +27,4 @@ const SearchResults = ({ data }) => {
 };
 
 export default SearchResults;
+
