@@ -948,15 +948,3 @@ input[type="range"]:disabled::-moz-range-thumb {
   padding: 15px;
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
-
-
-
-.section3 .Card2 .like-symbol {
-  margin-left: 10px;
-  margin-top: 1px;
-}
-
-.section3 .Card2 .like-symbol {
-    margin-right: 10px;
-    margin-top: 1px;
-}
